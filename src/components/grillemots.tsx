@@ -12,13 +12,16 @@ const GrilleMot: React.FC<GrilleMotsProps> = ({
   essaiCourant,
   motCible,
 }) => {
-  const rows = Array.from({ length: 5 }, (_, i) => {
-    const guess =
-      essais[i] || (i === essais.length ? essaiCourant.toUpperCase() : '');
+  //MC : longeur ajusté à 6 au lieu de 5 pour permette l'essais de 6 mots
+  const rows = Array.from({ length: 6 }, (_, i) => {
+    const guess = essais[i] || (i === essais.length ? essaiCourant.toUpperCase() : '');
     return guess.padEnd(5, ' ');
   });
 
-  const obtenirCouleurLettre = (letter: string, index: number) => {
+  //MC: paramètre ajouté pour avoir le numero de rangée
+  const obtenirCouleurLettre = (letter: string, index: number, rowIndex: number) => {
+    //MC: condition rajouté, si le nombre d'essais effectué est égale à la rangée actuelle, ne pas affiché la couleur
+    if (essais.length == rowIndex) return 'grey.500';
     if (!motCible) return 'default';
     if (motCible[index] === letter) return 'success.main';
     if (motCible.includes(letter)) return 'warning.main';
@@ -37,7 +40,7 @@ const GrilleMot: React.FC<GrilleMotsProps> = ({
                   display: 'flex',
                   alignItems: 'center',
                   justifyContent: 'center',
-                  backgroundColor: obtenirCouleurLettre(letter, index),
+                  backgroundColor: obtenirCouleurLettre(letter, index, rowIndex),
                   color: 'white',
                   fontSize: 24,
                   fontWeight: 'bold',

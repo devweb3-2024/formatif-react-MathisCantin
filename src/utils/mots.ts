@@ -2043,6 +2043,7 @@ export const listeMots = [
 ];
 
 export const obtenirMotAleatoire = () => {
-  const indexAleatoire = Math.floor(Math.random() + listeMots.length);
+  // MC: Ici pour avoir un nombre aléatoire il doit être multiplié par la valeur maximal
+  const indexAleatoire = Math.floor(Math.random() * listeMots.length);
   return listeMots[indexAleatoire].toUpperCase();
 };

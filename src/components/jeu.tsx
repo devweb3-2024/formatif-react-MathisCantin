@@ -1,8 +1,18 @@
 import React, { useState, useEffect } from 'react';
 import { Container, Snackbar, Alert } from '@mui/material';
 import GrilleMot from './grillemots';
-import { obtenirMotAleatoire, listeMots } from '../utils/mots';
+import { obtenirMotAleatoire,  listeMots } from '../utils/mots';
 import Clavier from './clavier';
+
+//MC: Ajoute d'une fonction pour enlever les accents des mots
+const enleverAccents = (mots: string[]) => {
+  for (let i = 0; i < mots.length; i++){
+    mots[i] = mots[i].normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+  }
+  return mots;
+}
+
+const listeMotsSansAccent = enleverAccents(listeMots);
 
 const Jeu: React.FC = () => {
   const [motCible, setMotCible] = useState<string>('');
@@ -40,7 +50,7 @@ const Jeu: React.FC = () => {
       });
     }
   };
-
+  
   const handleSoumettreEssai = () => {
     if (essaiCourant.length !== 5) {
       setMessage({
@@ -50,10 +60,7 @@ const Jeu: React.FC = () => {
       return;
     }
     if (
-      !listeMots.includes(
-        essaiCourant.charAt(0).toUpperCase() +
-          essaiCourant.slice(1).toLowerCase()
-      )
+      !listeMotsSansAccent.includes(essaiCourant) // MC: ici le mot était modifié de façon à se que sa soit une majuscule au début alors que aucun mots dans la liste est formaté comme cela
     ) {
       setMessage({
         text: "Ce mot n'est pas dans la liste.",
